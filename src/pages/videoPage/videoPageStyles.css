@@ -1,0 +1,9 @@
+.castButton {
+  width: 25px;
+  height: 25px;
+  padding: 1px;
+  vertical-align: middle;
+  display: show !important;
+  --disconnected-color: black;
+  --connected-color: green;
+}
