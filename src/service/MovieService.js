@@ -12,6 +12,24 @@ class MovieService {
       }
     }
   }
+  getRefreshURLStream(eventEmitter)
+  {
+    return Rx.Observable.fromEvent(eventEmitter,'refresh')
+    .do(data=>{
+      console.log(data.url)
+      firebase.database().ref(data.url).transaction(s=>{
+        console.log(s)
+        var unix_timestamp = '3'+s.source.substring(s.source.indexOf('&start=')+8,s.source.indexOf('&custom='))
+        
+        var newUrl = s.source.substring(0,s.source.indexOf('&start=')+7)+unix_timestamp+s.source.substring(s.source.indexOf('&custom='))
+        s.source = newUrl
+        return s
+      })
+    })
+    .flatMap(data=>{
+      return Rx.Observable.fromPromise(firebase.database().ref(data.url).once('value'))
+    })
+  }
   getMovieChangedStream(eventEmitter)
   {
     var movieChanged$ = Rx.Observable.fromEvent(eventEmitter, 'movieChanged')

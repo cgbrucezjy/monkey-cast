@@ -1,3 +1,10 @@
+.videoListItem {
+    background-color: #efefef;
+    padding: 20px;
+    margin-bottom: 20px;
+    max-width: 634px;
+    max-height: 356px;
+}
 .castButton {
   width: 25px;
   height: 25px;

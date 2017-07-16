@@ -2,7 +2,7 @@
 var fs = require('fs');
 //
 var system = require('system')
-var searchURL = "https://www.dnvod.tv/Movie/detail.aspx?id=1U1QqUFf49w%3d"
+var searchURL = "https://www.dnvod.tv/Movie/detail.aspx?id=Nkzb4Gu6WGo%3d"
 //system.args[system.args.length-1]
 
 console.log(searchURL)
@@ -43,7 +43,7 @@ casper.thenOpen("https://www.google.com/imghp",function(){
 
 casper.then(function() {
    console.log("search for "+search+" from google form")
-   this.fill('form[action="https://www.google.com/search"]', { q: search }, true);
+   this.fill('form[action="https://www.google.com/search"]', { q: search+" 电影" }, true);
 });
 
 casper.then(function() {
@@ -74,6 +74,7 @@ casper.then(function() {
     console.log(episodesArray[0])
     update.seriesName=search
     update.tags=tagsEl.toString()
+    update.url=searchURL
     console.log(JSON.stringify(update))
     fs.write('series.json', JSON.stringify(update), 'w');
     if(skip==0)

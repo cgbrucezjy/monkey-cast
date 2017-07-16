@@ -30,7 +30,15 @@ class App extends Component {
     MovieService.getMovieChangedStream(this.eventEmitter).subscribe(data=>{
         console.log('movie changed',data)
         this.setState({currMovie:data})
-        document.getElementById('_source').value=data.source
+        var newUrl=""
+        if(data.source)
+        {
+          var unix_timestamp = '2'+data.source.substring(data.source.indexOf('&start=')+8,data.source.indexOf('&custom='))
+          newUrl = data.source.substring(0,data.source.indexOf('&start=')+7)+unix_timestamp+data.source.substring(data.source.indexOf('&custom='))
+        }
+          
+        console.log(newUrl,data.title)
+        document.getElementById('_source').value=newUrl
         document.getElementById('_title').value=JSON.stringify(data.title)
         document.getElementById('_description').value=data.description
         document.getElementById('_contentType').value=data.contentType
@@ -39,6 +47,10 @@ class App extends Component {
     MovieService.getSeriesChangedStream(this.eventEmitter).subscribe(data=>{
       console.log(data)
         this.setState({currSeries:data})
+    })
+    MovieService.getRefreshURLStream(this.eventEmitter).subscribe(data=>{
+      console.log("url refresh",data.val())
+      this.setState({currMovie:data.val()})
     })
     firebase.database().ref('movies').on('child_added',(snap)=>{
         this.setState({movies:this.state.movies.concat(snap.val())})

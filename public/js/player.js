@@ -85,7 +85,7 @@ function volumeClick(event) {
   }
 }
 
-
+// $('playerControl').hidden = true;
 /**
  * Initialize cast service.
  * @param {boolean} isAvailable
@@ -103,7 +103,7 @@ window['__onGCastApiAvailable'] = function(isAvailable, reason) {
   // Init player controller
   player = new cast.framework.RemotePlayer();;
   playerController = new cast.framework.RemotePlayerController(player);
-  $('playerControl').hidden = true;
+
 
   // Listen to player properties changes
   playerController.addEventListener(
@@ -251,7 +251,7 @@ function playRemote(currentTime, isPaused) {
     var mediaInfo = new chrome.cast.media.MediaInfo(
         $('_source').value, $('_contentType').value)
     mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
-    mediaInfo.metadata.title = $('_title');
+    mediaInfo.metadata.title = $('_title').value;
     //mediaInfo.metadata.images = [{'url': content['thumb']}];
     var request = new chrome.cast.media.LoadRequest(mediaInfo);
     request.currentTime = currentTime;

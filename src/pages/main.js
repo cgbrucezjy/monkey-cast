@@ -103,7 +103,7 @@ class Main extends Component {
         <div className="add-movie">
             <Button className="btn btn-secondary" onClick={this.addDuonaoMovie}>Add Duonao Movie</Button>
             <Button className="btn btn-secondary" onClick={this.addSeries}>Add Series</Button>
-            <Link to="/howto">How Do I Add Movie?</Link>
+            {/* <Link to="/howto">How Do I Add Movie?</Link> */}
         </div>
 
     </div>)
