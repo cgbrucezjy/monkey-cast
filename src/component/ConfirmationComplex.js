@@ -16,7 +16,7 @@ class ComplexConfirmation extends React.Component {
     return () => {
       try{
         duonao=JSON.parse(this.refs.inputJson.value);
-        url=duonao.http.provider.substring(0,duonao.http.provider.indexOf('?'))
+        url=duonao.http.provider
         contentType=duonao.http.resourcetype
         description="Episode "+this.refs.description.value 
         console.log(url)

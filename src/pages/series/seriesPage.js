@@ -4,6 +4,7 @@ import {Button } from 'react-bootstrap'
 import * as firebase from 'firebase';
 import MovieCard from '../../component/movieCard'
 import { Link } from 'react-router'
+import {extractNumber} from '../../utils/util'
 class Main extends Component {
 
   constructor(props) {
@@ -39,16 +40,12 @@ class Main extends Component {
       console.log('cancel!');
     });
   }
-  extractNumber(s)
-  {
-    var numberPattern = /\d+/;
-    return s.match( numberPattern )?s.match( numberPattern )[0]:1000
-  }
+
   renderMovie()
   {
       return (
             Object.keys(this.props.currState.currSeries.movies)
-            .sort((a,b)=>parseInt(this.extractNumber(this.props.currState.currSeries.movies[a].description))-parseInt(this.extractNumber(this.props.currState.currSeries.movies[b].description)))
+            .sort((a,b)=>parseInt(extractNumber(this.props.currState.currSeries.movies[a].description))-parseInt(extractNumber(this.props.currState.currSeries.movies[b].description)))
             .map((key,i)=>{
                 var m=this.props.currState.currSeries.movies[key]
                 return (
@@ -70,7 +67,6 @@ class Main extends Component {
             </div>
             <div className="add-movie">
                 <Button className="btn btn-secondary" onClick={this.addDuonaoMovie.bind(this)}>Add more</Button>
-                <Link to="/howto">How Do I Add Movie?</Link>
             </div>
 
         </div>)

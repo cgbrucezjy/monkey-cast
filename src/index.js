@@ -11,6 +11,7 @@ import HowTo from './pages/howto/howto'
 import MovieService from './service/MovieService'
 import update from 'react-addons-update';
 import ReactGA from 'react-ga';
+import {extractNumber} from "./utils/util"
 class App extends Component {
 
   constructor(props) {
@@ -39,10 +40,47 @@ class App extends Component {
           
         console.log(newUrl,data.title)
         document.getElementById('_source').value=newUrl
-        document.getElementById('_title').value=JSON.stringify(data.title)
+        document.getElementById('_title').value=data.title || data.description
         document.getElementById('_description').value=data.description
         document.getElementById('_contentType').value=data.contentType
-        document.getElementById('movieTitle').innerHTML=JSON.stringify(data.title)
+        document.getElementById('movieTitle').innerHTML=data.title || data.description
+        if(!data.title && data.description)
+        {
+          console.log(this.state.currSeries.movies)
+          var sortedMoviesKeys=Object.keys(this.state.currSeries.movies)
+          .sort((a,b)=>parseInt(extractNumber(this.state.currSeries.movies[a].description))-parseInt(extractNumber(this.state.currSeries.movies[b].description)))
+          var queueingItems = sortedMoviesKeys.slice(sortedMoviesKeys.indexOf(data.key))
+          console.log(queueingItems)
+          queueingItems = queueingItems
+          .map(key=>this.state.currSeries.movies[key])
+          .map(movies=>{
+            var newUrl=""
+            if(movies.source)
+            {
+              var unix_timestamp = '2'+movies.source.substring(movies.source.indexOf('&start=')+8,movies.source.indexOf('&custom='))
+              newUrl = movies.source.substring(0,movies.source.indexOf('&start=')+7)+unix_timestamp+movies.source.substring(movies.source.indexOf('&custom='))
+            }      
+            movies.source=newUrl  
+            return movies       
+          })
+          console.log(queueingItems)
+          document.getElementById('_next').innerHTML=JSON.stringify(queueingItems)
+          // .map((movies,i)=>{
+          //   console.log(movies)
+          //   var nextSource = document.createElement("input")
+          //   nextSource.id = "_next_"+i+"_source"
+          //   var newUrl=""
+          //   if(movies.source)
+          //   {
+          //     var unix_timestamp = '2'+movies.source.substring(movies.source.indexOf('&start=')+8,movies.source.indexOf('&custom='))
+          //     newUrl = movies.source.substring(0,movies.source.indexOf('&start=')+7)+unix_timestamp+movies.source.substring(movies.source.indexOf('&custom='))
+          //   }           
+          //   nextSource.value = newUrl
+          //   var nextTitle = document.createElement("input")
+          //   nextTitle.id = "_next_"+i+"_source"
+          // })
+        }
+
     })
     MovieService.getSeriesChangedStream(this.eventEmitter).subscribe(data=>{
       console.log(data)

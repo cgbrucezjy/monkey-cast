@@ -5,6 +5,11 @@
     max-width: 634px;
     max-height: 356px;
 }
+
+
+.rh5v-DefaultPlayer_controls:hover {
+    opacity: 1 !important;
+}
 .castButton {
   width: 25px;
   height: 25px;

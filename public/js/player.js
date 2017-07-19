@@ -109,21 +109,20 @@ window['__onGCastApiAvailable'] = function(isAvailable, reason) {
   playerController.addEventListener(
       cast.framework.RemotePlayerEventType.IS_CONNECTED_CHANGED, function() {
         $('muteButton').disabled = !player.isConnected;
-        $('playerControl').hidden = !player.isConnected
-        $('localPlayer').hidden = player.isConnected;
+        $('playerControl').hidden = !player.isConnected;
         var videoElement = $('videoElement');
         if (player.isConnected) {
           // Continue playing remotely what is playing locally.
-          if (videoElement.src) {
-            // If local playback is done, do not play on remote
-            if (videoElement.currentTime < videoElement.duration) {
-              playRemote(
-                  getMediaIndex(videoElement.src), videoElement.currentTime,
-                  videoElement.paused);
-              videoElement.removeAttribute('src');
-              videoElement.load();
-            }
-          }
+          // if (videoElement.src) {
+          //   // If local playback is done, do not play on remote
+          //   if (videoElement.currentTime < videoElement.duration) {
+          //     playRemote(
+          //         getMediaIndex(videoElement.src), videoElement.currentTime,
+          //         videoElement.paused);
+          //     videoElement.removeAttribute('src');
+          //     videoElement.load();
+          //   }
+          // }
         } else {
           // Continue playing locally what is playing remotely.
           if (player.savedPlayerState && player.savedPlayerState.mediaInfo) {
@@ -178,7 +177,8 @@ window['__onGCastApiAvailable'] = function(isAvailable, reason) {
 
   playerController.addEventListener(
       cast.framework.RemotePlayerEventType.TITLE_CHANGED, function() {
-    $('mediaTitle').innerText = player.title;
+    $('mediaTitle').innerText = $('_title').value;
+    
   });
 
   playerController.addEventListener(
@@ -259,10 +259,29 @@ function playRemote(currentTime, isPaused) {
     session.loadMedia(request).then(
         function() {
           console.log('Load succeed');
+
         },
         function(e) {
           console.log('Load failed ' + e);
         });
+      console.log($('_next').innerHTML)
+      var queueingItems = JSON.parse($('_next').innerHTML)
+      console.log(queueingItems)
+      queueingItems=queueingItems.map(m=>{
+        var mediaInfo = new chrome.cast.media.MediaInfo(
+    m.source, m.contentType)
+        mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
+        mediaInfo.metadata.title = m.description;
+        var q = new chrome.cast.media.QueueItem(mediaInfo)
+        q.autoplay=true
+        return q
+      })
+      console.log(session)
+      qloadRequest=new chrome.cast.media.QueueLoadRequest(queueingItems)
+      console.log(qloadRequest)
+      session.queueLoad(qloadRequest).then(function(){
+        console.log("loaded success")
+      })
   }
 }
 

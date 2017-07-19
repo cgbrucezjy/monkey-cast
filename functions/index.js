@@ -2,7 +2,7 @@
 var fs = require('fs');
 //
 var system = require('system')
-var searchURL = "https://www.dnvod.tv/Movie/detail.aspx?id=Nkzb4Gu6WGo%3d"
+var searchURL = "https://www.dnvod.tv/Movie/detail.aspx?id=pv43fq34olA%3d"
 //system.args[system.args.length-1]
 
 console.log(searchURL)
@@ -22,7 +22,7 @@ Array.prototype.forEach.call(JSON.parse(fs.read("./cookies.json")), function(x){
         phantom.addCookie(x);
     });
 function episodes() {
-    var links = document.querySelectorAll('li .bfan-v a');
+    var links = document.querySelectorAll('li .bfan-n a');
     return Array.prototype.map.call(links, function(e) {
         return e.getAttribute('href');
     });
@@ -148,7 +148,7 @@ webpage.onResourceReceived = function(res) {
         
 
         var input=webpage.evaluate(function(){  
-          return document.querySelectorAll('li .bfan-v a')
+          return document.querySelectorAll('li .bfan-n a')
         });
         if(index>=input.length){
           
