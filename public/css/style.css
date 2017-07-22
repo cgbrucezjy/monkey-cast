@@ -1,3 +1,11 @@
+
+.bright.badge {
+
+    color: rgba(243, 3, 3, 0.76) !important;
+
+    background-color: rgba(251, 251, 8, 0.42) !important;
+
+}
 .videoListItem {
     background-color: #efefef;
     padding: 20px;
@@ -35,17 +43,23 @@
 }
 
 #footer {
-   position:absolute;
-   bottom:0;
-   width:100%;
-   background:#6cf;
-   display: -webkit-box;
-   display: -ms-flexbox;
-   display: flex;
-   -webkit-box-orient: horizontal;
-   -webkit-box-direction: normal;
-       -ms-flex-flow: row nowrap;
-           flex-flow: row nowrap;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 30%;
+    box-shadow: 5px 5px 5px #888888;
+    background: rgba(92, 188, 236, 0.6);
+    display: -webkit-box;
+    display: -ms-flexbox;
+    /* opacity: 1; */
+    /* border-style: ridge; */
+    padding: 20px;
+    border-radius: 55px;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row nowrap;
+    flex-flow: row wrap;
 }
 li{
   padding:8px !important

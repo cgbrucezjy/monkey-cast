@@ -20,13 +20,18 @@ class VideoPage extends Component {
     componentDidUpdate(prevProps, prevState){
         window.scrollTo(0, 0)
         console.log(this.props.currState.currMovie.source,prevProps.currState.currMovie.source)
-        if(this.refs.video1 && this.props.currState.currMovie.source !=prevProps.currState.currMovie.source)
+        if(this.refs.video1 && this.props.currState.currMovie.source !=prevProps.currState.currMovie.source && this.state.isSeries)
+        {
             this.refs.video1.videoEl.load();
+            this.props.eventEmitter.emit("seriesChanged", {seriesKey:this.props.params.seriesKey})
+        }
+            
     }
     componentWillMount() {
         console.log(this.props.params.seriesKey)
         if(this.props.params.seriesKey)
         {
+            
             this.props.eventEmitter.emit("movieChanged", {path:'series/'+this.props.params.seriesKey+'/movies/'+this.props.params.movieKey})
             this.setState({isSeries:true,url:'series/'+this.props.params.seriesKey+'/movies/'+this.props.params.movieKey})
         }

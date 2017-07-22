@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router'
+import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 import { EventEmitter } from 'events'
 import * as firebase from 'firebase';
 import {FireBaseConfig} from './config/config';
 import Main from './pages/main'
 import VideoPage from './pages/videoPage/videoPage'
 import SeriesPage from './pages/series/seriesPage'
+import RequestMovie from './pages/request/requestMovie'
 import HowTo from './pages/howto/howto'
 import MovieService from './service/MovieService'
 import update from 'react-addons-update';
@@ -44,12 +45,17 @@ class App extends Component {
         document.getElementById('_description').value=data.description
         document.getElementById('_contentType').value=data.contentType
         document.getElementById('movieTitle').innerHTML=data.title || data.description
-        if(!data.title && data.description)
+
+    })
+    MovieService.getSeriesChangedStream(this.eventEmitter).subscribe(data=>{
+      console.log(data)
+        this.setState({currSeries:data})
+        if(this.state.currMovie && this.state.currSeries.movies)
         {
           console.log(this.state.currSeries.movies)
           var sortedMoviesKeys=Object.keys(this.state.currSeries.movies)
           .sort((a,b)=>parseInt(extractNumber(this.state.currSeries.movies[a].description))-parseInt(extractNumber(this.state.currSeries.movies[b].description)))
-          var queueingItems = sortedMoviesKeys.slice(sortedMoviesKeys.indexOf(data.key))
+          var queueingItems = sortedMoviesKeys.slice(sortedMoviesKeys.indexOf(this.state.currMovie.key))
           console.log(queueingItems)
           queueingItems = queueingItems
           .map(key=>this.state.currSeries.movies[key])
@@ -65,26 +71,8 @@ class App extends Component {
           })
           console.log(queueingItems)
           document.getElementById('_next').innerHTML=JSON.stringify(queueingItems)
-          // .map((movies,i)=>{
-          //   console.log(movies)
-          //   var nextSource = document.createElement("input")
-          //   nextSource.id = "_next_"+i+"_source"
-          //   var newUrl=""
-          //   if(movies.source)
-          //   {
-          //     var unix_timestamp = '2'+movies.source.substring(movies.source.indexOf('&start=')+8,movies.source.indexOf('&custom='))
-          //     newUrl = movies.source.substring(0,movies.source.indexOf('&start=')+7)+unix_timestamp+movies.source.substring(movies.source.indexOf('&custom='))
-          //   }           
-          //   nextSource.value = newUrl
-          //   var nextTitle = document.createElement("input")
-          //   nextTitle.id = "_next_"+i+"_source"
-          // })
-        }
 
-    })
-    MovieService.getSeriesChangedStream(this.eventEmitter).subscribe(data=>{
-      console.log(data)
-        this.setState({currSeries:data})
+        }
     })
     MovieService.getRefreshURLStream(this.eventEmitter).subscribe(data=>{
       console.log("url refresh",data.val())
@@ -158,13 +146,16 @@ function fireTracking() {
     ReactGA.pageview(window.location.pathname + window.location.search);
 }
 ReactDOM.render(
-  <Router history={browserHistory} onUpdate={fireTracking}>
+  <Router history={hashHistory} onUpdate={fireTracking}>
     <Route path="/" component={App}>
       <IndexRoute component={Main} />
       <Route path="/videoPage/:movieKey" component={VideoPage} />
       <Route path="/seriesPage/:seriesKey" component={SeriesPage} />
+      
       <Route path="/seriesPage/:seriesKey/:movieKey" component={VideoPage} />
       <Route path="/howTo" component={HowTo} />
+      <Route path="/request" component={RequestMovie} />
+      
     </Route>
   </Router>,
   document.getElementById('root')

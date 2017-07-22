@@ -256,32 +256,44 @@ function playRemote(currentTime, isPaused) {
     var request = new chrome.cast.media.LoadRequest(mediaInfo);
     request.currentTime = currentTime;
     request.autoplay = !isPaused;
-    session.loadMedia(request).then(
-        function() {
-          console.log('Load succeed');
-
-        },
-        function(e) {
-          console.log('Load failed ' + e);
-        });
-      console.log($('_next').innerHTML)
+    
+    
+    if($('_next').innerHTML)
+    {
       var queueingItems = JSON.parse($('_next').innerHTML)
       console.log(queueingItems)
       queueingItems=queueingItems.map(m=>{
-        var mediaInfo = new chrome.cast.media.MediaInfo(
-    m.source, m.contentType)
+        var mediaInfo = new chrome.cast.media.MediaInfo(m.source, m.contentType)
         mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
         mediaInfo.metadata.title = m.description;
         var q = new chrome.cast.media.QueueItem(mediaInfo)
         q.autoplay=true
         return q
       })
-      console.log(session)
-      qloadRequest=new chrome.cast.media.QueueLoadRequest(queueingItems)
+      
+      var qloadRequest=new chrome.cast.media.QueueLoadRequest(queueingItems)
       console.log(qloadRequest)
-      session.queueLoad(qloadRequest).then(function(){
+
+      
+      session.c.queueLoad(qloadRequest,function(){
         console.log("loaded success")
-      })
+      },()=>{})      
+    }
+    else
+    {
+      session.loadMedia(request).then(
+          function() {
+            console.log('Load succeed');
+            console.log($('_next').innerHTML)
+
+
+          },
+          function(e) {
+            console.log('Load failed ' + e);
+          });
+    }
+
+
   }
 }
 

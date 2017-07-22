@@ -2,12 +2,12 @@
 var fs = require('fs');
 //
 var system = require('system')
-var searchURL = "https://www.dnvod.tv/Movie/detail.aspx?id=pv43fq34olA%3d"
+var searchURL = "https://www.dnvod.tv/Movie/detail.aspx?id=wOpupjY9Hgo%3d"
 //system.args[system.args.length-1]
 
 console.log(searchURL)
 var duonaoURL = 'https://www.dnvod.tv'
-var skip =0
+var skip =17
 
 var search="bruce"
 var update={}
@@ -22,7 +22,7 @@ Array.prototype.forEach.call(JSON.parse(fs.read("./cookies.json")), function(x){
         phantom.addCookie(x);
     });
 function episodes() {
-    var links = document.querySelectorAll('li .bfan-n a');
+    var links = document.querySelectorAll('li .bfan-v a');
     return Array.prototype.map.call(links, function(e) {
         return e.getAttribute('href');
     });
@@ -106,9 +106,10 @@ webpage.onResourceReceived = function(res) {
           var duonao=JSON.parse(res.body);
           var url=duonao.http.provider
           var contentType=duonao.http.resourcetype;
-          //var episode = url.split('-')[url.split('-').length-1].substring(0,url.split('-')[url.split('-').length-1].indexOf('.'))
           var episode = url.split('-')[url.split('-').length-1].substring(0,url.split('-')[url.split('-').length-1].indexOf('.'))
-          
+          //var episode = url.split('-')[url.split('-').length-1].substring(0,url.split('-')[url.split('-').length-1].indexOf('.'))
+          console.log(episode)
+          //episode = url.split('-')[url.split('-').length-2]
           var numberPattern = /\d+/;
           if(episode.match( numberPattern ))
           {
@@ -116,7 +117,9 @@ webpage.onResourceReceived = function(res) {
           }
           else
           {
+            
             var episode = url.split('-')[url.split('-').length-3]
+            
           }
           var m={
             contentType,
@@ -148,7 +151,7 @@ webpage.onResourceReceived = function(res) {
         
 
         var input=webpage.evaluate(function(){  
-          return document.querySelectorAll('li .bfan-n a')
+          return document.querySelectorAll('li .bfan-v a')
         });
         if(index>=input.length){
           

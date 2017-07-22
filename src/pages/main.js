@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { confirmComplex ,addSeries} from '../utils/confirm';
-import {Button } from 'react-bootstrap'
+import {Button,Badge } from 'react-bootstrap'
 import * as firebase from 'firebase';
 import MovieCard from '../component/movieCard'
 import { Link } from 'react-router'
@@ -92,6 +92,11 @@ class Main extends Component {
   {
     return (
     <div>
+          <div className="add-movie">
+            {/* <Button className="btn btn-secondary" onClick={this.addDuonaoMovie}>Add Duonao Movie</Button> */}
+            {/* <Button className="btn btn-secondary" onClick={this.addSeries}>Add Series</Button> */}
+             <Link to="/request">Request a Movie or Series<Badge className="bright">NEW</Badge></Link> 
+        </div>
         <h1>Movie list</h1>
           <div className='card-deck'>
               {this.renderMovie()}
@@ -100,11 +105,7 @@ class Main extends Component {
         <div className='card-deck'>
             {this.renderSeries()}
         </div>
-        <div className="add-movie">
-            <Button className="btn btn-secondary" onClick={this.addDuonaoMovie}>Add Duonao Movie</Button>
-            <Button className="btn btn-secondary" onClick={this.addSeries}>Add Series</Button>
-            {/* <Link to="/howto">How Do I Add Movie?</Link> */}
-        </div>
+
 
     </div>)
   }

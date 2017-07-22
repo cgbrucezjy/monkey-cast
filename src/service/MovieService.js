@@ -40,8 +40,6 @@ class MovieService {
     //.do(snap=>console.log(snap.val()))
     .map(snap=>snap.val())
     .do(snap=>firebase.database().ref('movies/'+snap.key).transaction(s=>{
-      
-      console.log(s)
 
       if(s)
       {
@@ -69,6 +67,7 @@ class MovieService {
   }
   getSeriesChangedStream(eventEmitter)
   {
+    console.log("seris changed")
     var seriesChanged$ = Rx.Observable.fromEvent(eventEmitter, 'seriesChanged')
     .do(key=>firebase.database().ref('series/'+key.seriesKey).once('value').then(n=>console.log(n.val())))
     .flatMap(key=>{
