@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import ReactDOM  from "react-dom"
 import {FormGroup,ControlLabel,FormControl,Button,ListGroup,ListGroupItem,ButtonGroup,Badge } from 'react-bootstrap'
 import WishListService from "../../service/WishListService"
+import ReactGA from 'react-ga';
+import {formatDate} from "../../utils/util"
+import './requestMovie.css'
 class RequestMovie extends Component {
 
   constructor(props) {
@@ -15,9 +18,19 @@ class RequestMovie extends Component {
     WishListService.watchWishList().on('child_added',(data)=>{
         this.setState({wishList:this.state.wishList.concat(data.val())})
     })
+    ReactGA.event({
+        category: 'wish list',
+        action: 'go to wishlist',
+        label: 'go to wishlist'
+    });
   }
   post(e){
       e.preventDefault()
+    ReactGA.event({
+        category: 'wish list',
+        action: 'adds to wishlist',
+        label: 'adds to wishlist'
+    });
       console.log(ReactDOM.findDOMNode(this.refs.inputMovie).value)
       var item={
           name:ReactDOM.findDOMNode(this.refs.inputMovie).value,
@@ -53,11 +66,16 @@ class RequestMovie extends Component {
   {
       return (
         <ListGroup>
-            {this.state.wishList.map((item,i)=>{
+            {this.state.wishList
+            .sort((a,b)=>b.timestamp-a.timestamp)
+            .map((item,i)=>{
                 return (
                     <ListGroupItem key={i}>
-                        {item.name}
-                        <Badge pullRight className={item.resolved?"bright":""}>{item.resolved?"added":"waiting"}</Badge>
+                        <div>
+                            {item.name}
+                            <Badge pullRight className={item.resolved?"bright":""}>{item.resolved?"added":"waiting"}</Badge>
+                        </div>
+                        <p>{formatDate(new Date(item.timesteamp))}</p>
                     </ListGroupItem>
                 )
             })}

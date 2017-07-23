@@ -2,12 +2,12 @@
 var fs = require('fs');
 //
 var system = require('system')
-var searchURL = "https://www.dnvod.tv/Movie/detail.aspx?id=wOpupjY9Hgo%3d"
+var searchURL = "https://www.dnvod.tv/Movie/detail.aspx?id=dGviywhPVQI%3d"
 //system.args[system.args.length-1]
 
 console.log(searchURL)
 var duonaoURL = 'https://www.dnvod.tv'
-var skip =17
+var skip =0
 
 var search="bruce"
 var update={}

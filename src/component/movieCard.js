@@ -13,27 +13,41 @@ class MovieCard extends Component {
      const {seriesName,imgURL,tags,views} = this.props.series
      //console.log(this.props.series);
     return (
-      <div className="card mb-3" onClick={this.props.gotoSeries}>
-        <img className="card-img-top" src={imgURL} alt={"img not displayed"} />
-        <div className="card-block">
-          <h2 className="card-title">{seriesName}</h2>
-          <h5 className="card-text">{tags}</h5>
-          <h5 className="card-text">Views:{views?views:0}</h5>
-          <Button type='button' className="btn btn-primary">Explore</Button>
+      <div className="wrapper" onClick={this.props.gotoSeries}>
+        <div className="product-img">
+          {imgURL?<img className="card-img-top" src={imgURL} alt={"img not displayed"} />:<div></div>}
         </div>
+        <div className="product-info">
+          <div className="product-text">
+            <h4 className="card-title">{seriesName}</h4>
+            {/* <p className="card-text">{tags}</p> */}
+            <p className="card-text">Views:{views?views:0}</p>  
+          </div>
+          <div className="product-price-btn">
+            <Button type='button' className="btn btn-primary">Explore</Button>
+          </div>
+        </div>
+
       </div>
     )   
   }
   renderMovie(){
     const {title,contentType,source,description,views,imgURL} = this.props.movie
     return (
-      <div className="card mb-3" onClick={this.props.watchMovie}>
-        <img className="card-img-top" src={imgURL} alt={"img not displayed"} />
-        <div className="card-block">
-          <h4 className="card-title">{title}</h4>
-          <p className="card-text">{description}</p>
-          <h5 className="card-text">Views:{views?views:0}</h5>
-          <Button type='button' className="btn btn-primary">Watch</Button>
+      <div className="wrapper" onClick={this.props.watchMovie}>
+        <div className="product-img">
+          {imgURL?<img className="card-img-top" src={imgURL} alt={"img not displayed"} />:<div></div>}
+        </div>
+        <div className="product-info">
+          <div className="product-text">
+            <h4>{title}</h4>
+            <p>{description}</p>
+            <p>Views:{views?views:0}</p>
+            
+          </div>
+          <div className="product-price-btn">
+            <Button type='button' className="btn btn-primary">Watch</Button>
+          </div>
         </div>
       </div>
     )
