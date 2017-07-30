@@ -35,7 +35,8 @@ class RequestMovie extends Component {
       var item={
           name:ReactDOM.findDOMNode(this.refs.inputMovie).value,
           resolved:false,
-          votes:0
+          votes:0,
+          email:ReactDOM.findDOMNode(this.refs.email).value
       }
     WishListService.addToWishList(item).then(data=>{
         console.log("movie added",data)
@@ -54,6 +55,13 @@ class RequestMovie extends Component {
             
             placeholder="Enter Movie/Series Name"
             ref = "inputMovie"
+          />
+         <ControlLabel>Email (alert me when it's ready): </ControlLabel>
+          <FormControl
+            type="email"
+            
+            placeholder="abc@abc.ocm"
+            ref = "email"
           />
         </FormGroup>
         <Button type="submit" className="pull-right" onClick={this.post.bind(this)}>

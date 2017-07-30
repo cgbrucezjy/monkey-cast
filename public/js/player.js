@@ -257,41 +257,41 @@ function playRemote(currentTime, isPaused) {
     request.currentTime = currentTime;
     request.autoplay = !isPaused;
     
-    
-    if($('_next').innerHTML)
-    {
-      var queueingItems = JSON.parse($('_next').innerHTML)
-      console.log(queueingItems)
-      queueingItems=queueingItems.map(m=>{
-        var mediaInfo = new chrome.cast.media.MediaInfo(m.source, m.contentType)
-        mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
-        mediaInfo.metadata.title = m.description;
-        var q = new chrome.cast.media.QueueItem(mediaInfo)
-        q.autoplay=true
-        return q
-      })
-      
-      var qloadRequest=new chrome.cast.media.QueueLoadRequest(queueingItems)
-      console.log(qloadRequest)
+    session.loadMedia(request).then(
+    function() {
+      console.log('Load succeed');
+      console.log($('_next').innerHTML)
+      if($('_next').innerHTML)
+      {
+        var queueingItems = JSON.parse($('_next').innerHTML)
+        console.log(queueingItems)
+        queueingItems=queueingItems.map(m=>{
+          var mediaInfo = new chrome.cast.media.MediaInfo(m.source.replace(/&amp;/g, '&'), m.contentType)
+          mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
+          mediaInfo.metadata.title = m.description;
+          var q = new chrome.cast.media.QueueItem(mediaInfo)
+          q.autoplay=true
+          return q
+        })
+        
+        var qloadRequest=new chrome.cast.media.QueueLoadRequest(queueingItems)
+        console.log(qloadRequest)
 
-      
-      session.c.queueLoad(qloadRequest,function(){
-        console.log("loaded success")
-      },()=>{})      
-    }
-    else
-    {
-      session.loadMedia(request).then(
-          function() {
-            console.log('Load succeed');
-            console.log($('_next').innerHTML)
+        
+        session.c.queueLoad(qloadRequest,function(){
+          console.log("loaded success")
+        },()=>{})      
+      }
+      else
+      {
 
+      }
 
-          },
-          function(e) {
-            console.log('Load failed ' + e);
-          });
-    }
+    },
+    function(e) {
+      console.log('Load failed ' + e);
+    });
+
 
 
   }

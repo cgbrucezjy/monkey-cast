@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { confirmComplex ,addSeries} from '../utils/confirm';
-import {Button,Badge } from 'react-bootstrap'
+import {Button,Badge,Navbar,Form,FormGroup,FormControl } from 'react-bootstrap'
 import * as firebase from 'firebase';
 import MovieCard from '../component/movieCard'
 import { Link } from 'react-router'
@@ -9,6 +9,9 @@ class Main extends Component {
 
   constructor(props) {
     super(props)
+    this.state={
+      filter:null
+    }
   }
 
   componentDidMount() {
@@ -24,6 +27,11 @@ class Main extends Component {
       this.props.history.push({
             pathname: '/seriesPage/'+s.key
           })
+  }
+  search(e)
+  {
+    console.log(e.target.value)
+    this.setState({filter:e.target.value})
   }
   addDuonaoMovie()
   {
@@ -60,6 +68,7 @@ class Main extends Component {
               s.views=s.views?s.views:0
               return s
             })
+            .filter(s=>this.state.filter?JSON.stringify(s).includes(this.state.filter):true)
             .sort((a,b)=>b.views-a.views)
             .map((m,i)=>{
                 return (
@@ -78,6 +87,7 @@ class Main extends Component {
               s.views=s.views?s.views:0
               return s
             })
+            .filter(s=>this.state.filter?JSON.stringify(s).includes(this.state.filter):true)
             .sort((a,b)=>b.views-a.views)
             .map((s,i)=>{
                 return (
@@ -88,14 +98,38 @@ class Main extends Component {
             })
       )
   }
+  renderSearchBar()
+  {
+    return (
+        <Navbar>
+          <Navbar.Header>
+            <Navbar.Brand>
+              
+              <a href="#">Find</a>
+            </Navbar.Brand>
+            <Navbar.Toggle />
+          </Navbar.Header>
+          <Navbar.Collapse>
+            <Navbar.Form pullLeft>
+              <FormGroup>
+                <FormControl type="text" placeholder="name,genre,and stuff" onChange={this.search.bind(this)}/>
+              </FormGroup>
+              {'   '}
+              <Badge className="bright">NEW</Badge>
+            </Navbar.Form>
+          </Navbar.Collapse>
+        </Navbar>
+    )
+  }
   render()
   {
     return (
     <div>
+          {this.renderSearchBar()}
           <div className="add-movie">
             {/* <Button className="btn btn-secondary" onClick={this.addDuonaoMovie}>Add Duonao Movie</Button> */}
             {/* <Button className="btn btn-secondary" onClick={this.addSeries}>Add Series</Button> */}
-             <Link to="/request">Request a Movie or Series<Badge className="bright">NEW</Badge></Link> 
+             <Link to="/request">Request a Movie or Series</Link> 
         </div>
         <h1>Movie list</h1>
           <div className='card-deck'>

@@ -2,7 +2,7 @@
 var fs = require('fs');
 //
 var system = require('system')
-var searchURL = "https://www.dnvod.tv/Movie/detail.aspx?id=dGviywhPVQI%3d"
+var searchURL = "https://www.dnvod.tv/Movie/detail.aspx?id=OmhgfjMzbMg%3d"
 //system.args[system.args.length-1]
 
 console.log(searchURL)
