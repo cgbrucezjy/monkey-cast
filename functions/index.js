@@ -2,7 +2,7 @@
 var fs = require('fs');
 //
 var system = require('system')
-var searchURL = "https://www.dnvod.tv/Movie/detail.aspx?id=OmhgfjMzbMg%3d"
+var searchURL = "https://www.dnvod.tv/Movie/detail.aspx?id=1yKEJ1mraAY%3d"
 //system.args[system.args.length-1]
 
 console.log(searchURL)
@@ -17,7 +17,7 @@ var casper = require('casper').create();
 var webpage = require('webpage').create();
 webpage.captureContent = [ /js/]
 webpage.viewportSize = { width: 1480, height: 1800 };
-
+var selector = 'li .bfan-v a'
 Array.prototype.forEach.call(JSON.parse(fs.read("./cookies.json")), function(x){
         phantom.addCookie(x);
     });

@@ -110,6 +110,7 @@ class Main extends Component {
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
+            <button pullright className="btn btn-secondary add-movie-btn" onClick={this.addDuonaoMovie}>Add Movie</button>
             <Navbar.Form pullLeft>
               <FormGroup>
                 <FormControl type="text" placeholder="name,genre,and stuff" onChange={this.search.bind(this)}/>
@@ -127,7 +128,7 @@ class Main extends Component {
     <div>
           {this.renderSearchBar()}
           <div className="add-movie">
-            {/* <Button className="btn btn-secondary" onClick={this.addDuonaoMovie}>Add Duonao Movie</Button> */}
+             {/*   */}
             {/* <Button className="btn btn-secondary" onClick={this.addSeries}>Add Series</Button> */}
              <Link to="/request">Request a Movie or Series</Link> 
         </div>

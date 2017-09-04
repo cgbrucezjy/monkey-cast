@@ -140,6 +140,36 @@ class App extends Component {
 
 }
 firebase.initializeApp(FireBaseConfig);
+const messaging = firebase.messaging();
+messaging.requestPermission()
+.then(function() {
+  console.log('Notification permission granted.');
+  // TODO(developer): Retrieve an Instance ID token for use with FCM.
+  // ...
+  return messaging.getToken()
+})
+.then(token=>{
+  console.log(token)
+  firebase.database().ref('tokens').update({[token]:true})
+})
+.catch(function(err) {
+  console.log('Unable to get permission to notify.', err);
+});
+
+messaging.onTokenRefresh(function() {
+  messaging.getToken()
+  .then(function(refreshedToken) {
+    console.log(refreshedToken,'Token refreshed.');
+    
+  })
+  .catch(function(err) {
+    console.log('Unable to retrieve refreshed token ', err);
+  });
+});
+
+messaging.onMessage(message=>{
+  console.log(message)
+})
 ReactGA.initialize('UA-101866371-1');
 function fireTracking() {
     ReactGA.set({ page: window.location.pathname + window.location.search });

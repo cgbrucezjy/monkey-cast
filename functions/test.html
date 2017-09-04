@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+<head></head>
+<body>
+    <script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>
+    <script src="peer.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+    <label id="yourID">Your ID is: </label><br>
+    <label id="currentConn">You are currently connected to: </label>
+    <div>
+        <button id="connectButton">Connect to this ID</button>
+        <input type="text" id="toConnectID">
+    </div>
+    <hr>
+
+    <div>
+        <textarea id="playArea"></textarea><br>
+        <button id="sendMessage">Send Message</button>
+    </div>
+        <script>
+            console.log("JS Started");
+            var peer1 = new Peer({key: 'lwjd5qra8257b9', debug: 3});
+
+            document.getElementById("connectButton").disabled = true;
+            document.getElementById("sendMessage").disabled = true;
+            var conn;
+            peer1.on('open', function(id){
+                console.log("Peer1 ready");
+                document.getElementById("connectButton").disabled = false;
+                document.getElementById("yourID").innerHTML = "Your ID is: "+id;
+
+
+            });
+
+            peer1.on('connection', function(dataConnection){
+                document.getElementById("sendMessage").disabled = false;
+                document.getElementById("currentConn").innerHTML = "You are currently connected to: "+dataConnection.peer;
+                conn = dataConnection;
+                conn.on('data', function(data){
+                    console.log("Data received: "+data);
+                    document.getElementById("playArea").value = data;
+                });
+                console.log("Connected")
+
+            });
+
+
+            $("#connectButton").click(function(){
+                ID = document.getElementById("toConnectID").value;
+                conn = peer1.connect(ID);
+                conn.on('open',function(){
+                    console.log("open")
+                    conn.on('data', function(data){
+                        console.log("Data received: "+data);
+                        document.getElementById("playArea").value = data;
+                    });
+                })
+                document.getElementById("currentConn").innerHTML = "You are currently connected to: "+ID;
+                document.getElementById("sendMessage").disabled = false;
+            });
+
+
+
+
+            $("#sendMessage").click(function(){
+                text = document.getElementById("playArea").value;
+                conn.send(text);
+                console.log("Data sent: "+text);
+            });
+
+    </script>
+</body>
+</html>
